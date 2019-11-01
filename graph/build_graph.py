@@ -63,19 +63,55 @@ class Graph:
                 else:
                     continue
 
-    def DFS_new(self, s): # recursive
+    def DFS_recursive(self, s):
         visited = [False] * len(self.graph)
         stack = []
         stack.append(s)
         while stack:
-            # pop a vertext from stack and print it
-            s = stack[-1]
-            stack.pop()
-            if not visited[s]:
-                visited[s] = True
-            for node in self.graph[s]:
+            cur_node = stack.pop()
+            if not visited[cur_node]:
+                visited[cur_node] = True
+            for node in self.graph(cur_node):
                 if not visited[node]:
                     stack.append(node)
+
+    def countPaths(self, s, d):
+        # return count of paths from 's' to 'd'
+        # mark all the vertices as not visited
+        visited = [False] * len(self.graph)
+        self.count = 0
+        self.backtrack(s, d, visited)
+        return self.count
+
+
+    def backtrack(self, u, d, visited):
+
+        visited[u] = True
+        # if the current vertex is same as the destination:
+        if u == d:
+            self.count += 1
+        else:
+            i = 0
+            while i < len(self.graph[u]):
+                if not visited[self.graph[u][i]]:
+                    self.backtrack(self.graph[u][i], d, visited)
+                i += 1
+
+
+
+    # def DFS_new(self, s): # recursive
+    #     visited = [False] * len(self.graph)
+    #     stack = []
+    #     stack.append(s)
+    #     while stack:
+    #         # pop a vertext from stack and print it
+    #         s = stack[-1]
+    #         stack.pop()
+    #         if not visited[s]:
+    #             visited[s] = True
+    #         for node in self.graph[s]:
+    #             if not visited[node]:
+    #                 stack.append(node)
 '''
 The above code traverses only the vertices reachable from a given source vertex;
 All the vertices may not be reachable from a given vertex (example disconnected graph)
